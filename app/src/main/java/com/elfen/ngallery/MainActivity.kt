@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Surface
 import androidx.navigation.compose.rememberNavController
 import com.elfen.ngallery.ui.Navigation
 import com.elfen.ngallery.ui.theme.AppTheme
@@ -16,8 +17,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                val navController = rememberNavController()
-                Navigation(navHostController = navController)
+                Surface{
+                    val navController = rememberNavController()
+                    Navigation(navHostController = navController)
+                }
             }
         }
     }

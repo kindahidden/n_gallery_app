@@ -12,12 +12,16 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.elfen.ngallery.ui.screens.browse.browseScreen
+import com.elfen.ngallery.ui.screens.gallery.galleryScreen
 import com.elfen.ngallery.ui.screens.home.Home
 import com.elfen.ngallery.ui.screens.home.homeScreen
+import com.elfen.ngallery.ui.screens.login.loginScreen
+import com.elfen.ngallery.ui.screens.reader.readerRoute
 import kotlin.math.roundToInt
 
 const val ANIM_DURATION_MILLIS = 150
@@ -68,5 +72,8 @@ fun Navigation(navHostController: NavHostController) {
     ) {
         homeScreen(navHostController)
         browseScreen(navHostController)
+        loginScreen(navHostController)
+        galleryScreen(navHostController)
+        readerRoute(navHostController)
     }
 }

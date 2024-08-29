@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">N Gallery</string>
+    <string name="login_url">https://nhentai.net/</string>
 </resources>
