@@ -1,7 +1,9 @@
 package com.elfen.ngallery.ui.screens.browse
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.elfen.ngallery.data.remote.APIService
 import com.elfen.ngallery.data.repository.GalleryRepository
 import com.elfen.ngallery.models.Sorting
@@ -26,9 +28,11 @@ import kotlin.time.toDuration
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class BrowseViewModel @Inject constructor(
-    private val galleryRepository: GalleryRepository
+    private val galleryRepository: GalleryRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val _query = MutableStateFlow("")
+    private val routeParams = savedStateHandle.toRoute<BrowseRoute>()
+    private val _query = MutableStateFlow(routeParams.query ?: "")
     private val _page = MutableStateFlow(1)
     private val _sorting = MutableStateFlow(Sorting.POPULAR)
     private val _state = MutableStateFlow(BrowseUiState())

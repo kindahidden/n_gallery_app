@@ -44,6 +44,10 @@ class GalleryRepository(
         galleryDao.updateGallery(gallery.copy(saved = true).asEntity())
     }
 
+    suspend fun removeGallery(gallery: Gallery){
+        galleryDao.updateGallery(gallery.copy(saved = false).asEntity())
+    }
+
     fun getSavedGalleriesFlow() =
         galleryDao.getSavedGalleries().map { it.map { gallery -> gallery.asAppModel() } }
 }

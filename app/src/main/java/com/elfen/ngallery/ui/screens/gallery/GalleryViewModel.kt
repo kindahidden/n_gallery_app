@@ -37,4 +37,8 @@ class GalleryViewModel @Inject constructor(
     fun saveGallery() {
         viewModelScope.launch { galleryRepository.saveGallery(state.value.gallery!!) }
     }
+
+    fun unsaveGallery(){
+        viewModelScope.launch { galleryRepository.removeGallery(state.value.gallery!!) }
+    }
 }

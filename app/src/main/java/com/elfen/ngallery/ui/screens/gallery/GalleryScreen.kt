@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,7 +23,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -53,11 +52,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import coil.compose.AsyncImage
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.models.GalleryImage
 import com.elfen.ngallery.models.GalleryPage
 import com.elfen.ngallery.ui.composables.Image
+import com.elfen.ngallery.ui.screens.browse.BrowseRoute
+import com.elfen.ngallery.ui.screens.gallery.composables.Tags
 import com.elfen.ngallery.ui.screens.reader.ReaderRoute
 import com.elfen.ngallery.ui.theme.AppTheme
 import com.elfen.ngallery.ui.theme.Sizes
@@ -75,6 +75,7 @@ data class GalleryRoute(val id: Int)
 fun GalleryScreen(
     onNavigate: (Any) -> Unit,
     onSave: () -> Unit,
+    onUnsave: () -> Unit,
     onBack: () -> Unit,
     state: GalleryUiState
 ) {
@@ -167,50 +168,24 @@ fun GalleryScreen(
                                 }
                             )
 
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(Sizes.small)
-                            ) {
-                                gallery.tags.forEach { (category, tags) ->
-                                    FlowRow(
-                                        verticalArrangement = Arrangement.spacedBy(Sizes.smaller),
-                                        horizontalArrangement = Arrangement.spacedBy(Sizes.small)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier.fillMaxRowHeight(),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = "$category:",
-                                                style = MaterialTheme.typography.labelLarge,
-                                            )
-                                        }
-                                        tags.forEach {
-                                            Box(
-                                                Modifier
-                                                    .clip(RoundedCornerShape(Sizes.smaller))
-                                                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                                                    .padding(
-                                                        vertical = Sizes.smaller,
-                                                        horizontal = Sizes.small
-                                                    )
-                                            ) {
-                                                Text(
-                                                    text = it,
-                                                    style = MaterialTheme.typography.labelMedium,
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                )
-                                            }
-                                        }
-                                    }
+                            Tags(
+                                tags = gallery.tags,
+                                onClick = { category, tag ->
+                                    onNavigate(
+                                        BrowseRoute(query = "$category:$tag")
+                                    )
                                 }
-                            }
+                            )
 
-                            Button(
-                                onClick = { onSave() },
-                                enabled = !gallery.saved
-                            ) {
-                                Text(text = "Save")
-                            }
+                            if (gallery.saved)
+                                TextButton(onClick = { onUnsave() }) {
+                                    Text(text = "Unsave")
+                                }
+                            else
+                                Button(onClick = { onSave() }) {
+                                    Text(text = "Save")
+                                }
+
 
                             HorizontalDivider()
                             Spacer(modifier = Modifier.height(Sizes.smaller))
@@ -253,7 +228,7 @@ fun GalleryScreen(
                                     .padding(horizontal = Sizes.smaller)
                             ) {
                                 Text(
-                                    text = if(isAnimated) "${page.page} • GIF" else page.page.toString(),
+                                    text = if (isAnimated) "${page.page} • GIF" else page.page.toString(),
                                     color = Color.White,
                                     style = MaterialTheme.typography.labelMedium
                                 )
@@ -439,7 +414,8 @@ private fun GalleryScreenPreview() {
             onBack = { /*TODO*/ },
             state = GalleryUiState(gallery = gallery, isLoading = false),
             onNavigate = {},
-            onSave = {}
+            onSave = {},
+            onUnsave = {}
         )
     }
 }
@@ -453,7 +429,8 @@ fun NavGraphBuilder.galleryScreen(navController: NavController) {
             state = state,
             onBack = navController::popBackStack,
             onNavigate = navController::navigate,
-            onSave = viewModel::saveGallery
+            onSave = viewModel::saveGallery,
+            onUnsave = viewModel::unsaveGallery
         )
     }
 }
