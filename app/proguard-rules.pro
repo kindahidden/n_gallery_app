@@ -245,4 +245,5 @@
 # is used.
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
--keep class com.elfennani.aniwatch.data.remote.models.** {*;}
+-keep class com.elfen.ngallery.data.remote.models.** {*;}
+-keep class com.elfen.ngallery.models.** {*;}

@@ -33,4 +33,8 @@ class GalleryViewModel @Inject constructor(
     init {
         viewModelScope.launch { galleryRepository.fetchGallery(route.id) }
     }
+
+    fun saveGallery() {
+        viewModelScope.launch { galleryRepository.saveGallery(state.value.gallery!!) }
+    }
 }

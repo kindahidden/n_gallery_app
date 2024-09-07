@@ -1,8 +1,6 @@
-package com.elfen.ngallery.ui.screens.browse.composables
+package com.elfen.ngallery.ui.composables
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -29,13 +27,13 @@ fun GalleryItemCard(
             .clip(RoundedCornerShape(Sizes.small))
             .clickable { onClick() }
     ) {
-        AsyncImage(
+        Image(
             model = gallery.thumbnail.url,
-            contentDescription = null,
             modifier = Modifier
                 .clip(RoundedCornerShape(Sizes.small))
                 .fillMaxWidth()
-                .aspectRatio(gallery.thumbnail.aspectRatio)
+                .aspectRatio(gallery.thumbnail.aspectRatio),
+            animated = false
         )
         Spacer(modifier = Modifier.height(Sizes.smaller))
         Text(

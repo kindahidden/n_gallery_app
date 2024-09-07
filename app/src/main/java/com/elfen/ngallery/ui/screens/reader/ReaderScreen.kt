@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import coil.compose.AsyncImage
+import com.elfen.ngallery.ui.composables.Image
 import com.elfen.ngallery.ui.screens.gallery.GalleryUiState
 
 @Composable
@@ -31,10 +32,9 @@ fun ReaderScreen(
                 state = scrollState,
                 contentPadding = it
             ) {
-                items(state.gallery!!.pages, key = {it.page}) { page ->
-                    AsyncImage(
+                items(state.gallery!!.pages, key = {page -> page.page}) { page ->
+                    Image(
                         model = page.hdUrl,
-                        contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(page.aspectRatio)

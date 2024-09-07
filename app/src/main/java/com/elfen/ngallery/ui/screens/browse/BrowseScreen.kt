@@ -30,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +45,7 @@ import com.elfen.ngallery.models.Resource
 import com.elfen.ngallery.models.Sorting
 import com.elfen.ngallery.models.toDisplay
 import com.elfen.ngallery.ui.composables.ErrorCard
-import com.elfen.ngallery.ui.screens.browse.composables.GalleryItemCard
+import com.elfen.ngallery.ui.composables.GalleryItemCard
 import com.elfen.ngallery.ui.screens.browse.composables.SearchBar
 import com.elfen.ngallery.ui.theme.Sizes
 import kotlinx.coroutines.launch

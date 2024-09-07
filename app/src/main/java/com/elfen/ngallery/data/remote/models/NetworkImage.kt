@@ -10,7 +10,11 @@ data class NetworkImage(
 )
 
 val NetworkImage.extension
-    get() = if(t == "p") "png" else "jpg"
+    get() = when(t){
+        "p" -> "png"
+        "g" -> "gif"
+        else -> "jpg"
+    }
 
 fun NetworkImage.toThumbnailUrl(mediaId: String) = "https://t3.nhentai.net/galleries/$mediaId/thumb.$extension"
 fun NetworkImage.toCoverUrl(mediaId: String) = "https://t5.nhentai.net/galleries/${mediaId}/cover.$extension"

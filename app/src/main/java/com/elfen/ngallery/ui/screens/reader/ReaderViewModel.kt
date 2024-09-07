@@ -9,7 +9,10 @@ import com.elfen.ngallery.models.Resource
 import com.elfen.ngallery.ui.screens.gallery.GalleryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,31 +24,7 @@ class ReaderViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<ReaderRoute>()
-    private val _state = MutableStateFlow(GalleryUiState())
-    val state = _state.asStateFlow()
-
-    init {
-        fetchGallery()
-    }
-
-    private fun fetchGallery() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            when (val res = galleryRepository.getGallery(route.id)) {
-                is Resource.Error -> _state.update {
-                    it.copy(
-                        error = res.message,
-                        isLoading = false
-                    )
-                }
-
-                is Resource.Success -> _state.update {
-                    it.copy(
-                        gallery = res.data,
-                        isLoading = false
-                    )
-                }
-            }
-        }
-    }
+    val state = galleryRepository.getGalleryFlow(route.id)
+        .map { GalleryUiState(isLoading = false, gallery = it) }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = GalleryUiState())
 }

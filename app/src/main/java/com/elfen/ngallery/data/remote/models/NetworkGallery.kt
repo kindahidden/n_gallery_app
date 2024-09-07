@@ -28,5 +28,6 @@ fun NetworkGallery.toAppModel() = Gallery(
     thumbnail = images.thumbnail.toThumbnail(mediaId),
     pages = images.pages.mapIndexed { index, networkImage -> networkImage.toPage(mediaId, index) },
     tags = tags.toMap(),
-    uploaded = Instant.fromEpochSeconds(uploadDate).toLocalDateTime(TimeZone.UTC)
+    uploaded = Instant.fromEpochSeconds(uploadDate).toLocalDateTime(TimeZone.UTC),
+    saved = false
 )

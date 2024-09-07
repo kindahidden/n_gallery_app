@@ -24,7 +24,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -55,6 +57,7 @@ import coil.compose.AsyncImage
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.models.GalleryImage
 import com.elfen.ngallery.models.GalleryPage
+import com.elfen.ngallery.ui.composables.Image
 import com.elfen.ngallery.ui.screens.reader.ReaderRoute
 import com.elfen.ngallery.ui.theme.AppTheme
 import com.elfen.ngallery.ui.theme.Sizes
@@ -71,6 +74,7 @@ data class GalleryRoute(val id: Int)
 @Composable
 fun GalleryScreen(
     onNavigate: (Any) -> Unit,
+    onSave: () -> Unit,
     onBack: () -> Unit,
     state: GalleryUiState
 ) {
@@ -140,14 +144,14 @@ fun GalleryScreen(
                         Column(
                             verticalArrangement = Arrangement.spacedBy(Sizes.normal)
                         ) {
-                            AsyncImage(
+                            Image(
                                 model = gallery.cover.url,
-                                contentDescription = null,
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(Sizes.normal))
                                     .background(MaterialTheme.colorScheme.surfaceContainer)
                                     .width(128.dp)
-                                    .aspectRatio(gallery.cover.aspectRatio)
+                                    .aspectRatio(gallery.cover.aspectRatio),
+                                animated = false
                             )
                             Text(
                                 text = gallery.title,
@@ -201,6 +205,13 @@ fun GalleryScreen(
                                 }
                             }
 
+                            Button(
+                                onClick = { onSave() },
+                                enabled = !gallery.saved
+                            ) {
+                                Text(text = "Save")
+                            }
+
                             HorizontalDivider()
                             Spacer(modifier = Modifier.height(Sizes.smaller))
                         }
@@ -219,15 +230,17 @@ fun GalleryScreen(
                                     )
                                 }
                         ) {
-                            AsyncImage(
+                            Image(
                                 model = page.url,
-                                contentDescription = null,
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(Sizes.normal))
                                     .background(MaterialTheme.colorScheme.surfaceContainer)
                                     .fillMaxWidth()
-                                    .aspectRatio(page.aspectRatio)
+                                    .aspectRatio(page.aspectRatio),
+                                animated = false
                             )
+
+                            val isAnimated = page.url.endsWith("gif")
 
                             Box(
                                 modifier = Modifier
@@ -240,7 +253,7 @@ fun GalleryScreen(
                                     .padding(horizontal = Sizes.smaller)
                             ) {
                                 Text(
-                                    text = page.page.toString(),
+                                    text = if(isAnimated) "${page.page} • GIF" else page.page.toString(),
                                     color = Color.White,
                                     style = MaterialTheme.typography.labelMedium
                                 )
@@ -259,6 +272,7 @@ private fun GalleryScreenPreview() {
     val gallery = Gallery(
         id = 423371,
         mediaId = "2346373",
+        saved = false,
         title = "[NEW] Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         cover = GalleryImage(
             url = "https://t5.nhentai.net/galleries/2346373/cover.jpg",
@@ -424,7 +438,8 @@ private fun GalleryScreenPreview() {
         GalleryScreen(
             onBack = { /*TODO*/ },
             state = GalleryUiState(gallery = gallery, isLoading = false),
-            onNavigate = {}
+            onNavigate = {},
+            onSave = {}
         )
     }
 }
@@ -437,7 +452,8 @@ fun NavGraphBuilder.galleryScreen(navController: NavController) {
         GalleryScreen(
             state = state,
             onBack = navController::popBackStack,
-            onNavigate = navController::navigate
+            onNavigate = navController::navigate,
+            onSave = viewModel::saveGallery
         )
     }
 }

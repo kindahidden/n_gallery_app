@@ -20,6 +20,7 @@ data class GalleryEntity(
     @Embedded(prefix = "thumbnail_") val thumbnail: EmbeddedImage,
     val uploaded: Long,
     val tags: Map<String, List<String>>,
+    val saved: Boolean
 )
 
 fun GalleryEntity.asAppModel(pages: List<GalleryPage>) = Gallery(
@@ -30,7 +31,8 @@ fun GalleryEntity.asAppModel(pages: List<GalleryPage>) = Gallery(
     thumbnail = thumbnail.asAppModel(),
     pages = pages,
     tags = tags,
-    uploaded = Instant.fromEpochMilliseconds(uploaded).toLocalDateTime(TimeZone.UTC)
+    uploaded = Instant.fromEpochMilliseconds(uploaded).toLocalDateTime(TimeZone.UTC),
+    saved = saved
 )
 
 fun Gallery.asEntity() = GalleryEntity(
@@ -40,5 +42,6 @@ fun Gallery.asEntity() = GalleryEntity(
     cover = cover.asEmbeddedImage(),
     thumbnail = thumbnail.asEmbeddedImage(),
     uploaded = uploaded.toInstant(TimeZone.UTC).toEpochMilliseconds(),
-    tags = tags
+    tags = tags,
+    saved = saved
 )

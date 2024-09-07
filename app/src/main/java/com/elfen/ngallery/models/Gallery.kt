@@ -12,5 +12,6 @@ data class Gallery(
     val thumbnail: GalleryImage,
     val pages: List<GalleryPage>,
     val tags: Map<String, List<String>>,
-    val uploaded: LocalDateTime
+    val uploaded: LocalDateTime,
+    val saved: Boolean,
 )
