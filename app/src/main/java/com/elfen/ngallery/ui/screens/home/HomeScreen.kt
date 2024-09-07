@@ -9,9 +9,11 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -32,6 +34,7 @@ import com.elfen.ngallery.data.local.storeToken
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.ui.screens.browse.BrowseRoute
 import com.elfen.ngallery.ui.composables.GalleryItemCard
+import com.elfen.ngallery.ui.screens.extract.ExtractRoute
 import com.elfen.ngallery.ui.screens.gallery.GalleryRoute
 import com.elfen.ngallery.ui.screens.login.Login
 import com.elfen.ngallery.ui.theme.Sizes
@@ -52,7 +55,16 @@ fun HomeScreen(
     val dir = LocalLayoutDirection.current
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Home") }) },
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Home") },
+                actions = {
+                    IconButton(onClick = { onNavigate(ExtractRoute) }) {
+                        Icon(imageVector = Icons.Default.Tag, contentDescription = null)
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             if (isLoggedIn)
                 ExtendedFloatingActionButton(

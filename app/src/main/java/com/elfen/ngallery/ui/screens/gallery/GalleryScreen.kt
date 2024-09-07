@@ -172,7 +172,7 @@ fun GalleryScreen(
                                 tags = gallery.tags,
                                 onClick = { category, tag ->
                                     onNavigate(
-                                        BrowseRoute(query = "$category:$tag")
+                                        BrowseRoute(query = "$category:\"$tag\"")
                                     )
                                 }
                             )

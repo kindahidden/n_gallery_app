@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.elfen.ngallery.ui.screens.browse.browseScreen
+import com.elfen.ngallery.ui.screens.extract.extractScreen
 import com.elfen.ngallery.ui.screens.gallery.galleryScreen
 import com.elfen.ngallery.ui.screens.home.Home
 import com.elfen.ngallery.ui.screens.home.homeScreen
@@ -75,5 +76,6 @@ fun Navigation(navHostController: NavHostController) {
         loginScreen(navHostController)
         galleryScreen(navHostController)
         readerRoute(navHostController)
+        extractScreen(navHostController)
     }
 }
