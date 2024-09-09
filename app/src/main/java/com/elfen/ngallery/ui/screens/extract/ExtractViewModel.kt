@@ -45,7 +45,7 @@ class ExtractViewModel @Inject constructor(
     fun requestGallery(id: Int) {
         viewModelScope.launch {
             updateGalleryState(id, GalleryLoadingState.Loading)
-            when (val result = repository.getGallery(id)) {
+            when (val result = repository.fetchGalleryById(id)) {
                 is Resource.Success -> updateGalleryState(
                     id,
                     GalleryLoadingState.Loaded(result.data!!)

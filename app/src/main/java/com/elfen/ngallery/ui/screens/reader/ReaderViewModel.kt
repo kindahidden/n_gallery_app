@@ -24,7 +24,7 @@ class ReaderViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<ReaderRoute>()
-    val state = galleryRepository.getGalleryFlow(route.id)
+    val state = galleryRepository.getGalleryByIdFlow(route.id)
         .map { GalleryUiState(isLoading = false, gallery = it) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = GalleryUiState())
 }

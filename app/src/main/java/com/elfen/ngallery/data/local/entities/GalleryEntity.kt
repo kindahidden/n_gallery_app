@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import com.elfen.ngallery.models.DownloadState
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.models.GalleryPage
 import kotlinx.datetime.Instant
@@ -20,10 +21,9 @@ data class GalleryEntity(
     @Embedded(prefix = "thumbnail_") val thumbnail: EmbeddedImage,
     val uploaded: Long,
     val tags: Map<String, List<String>>,
-    val saved: Boolean
 )
 
-fun GalleryEntity.asAppModel(pages: List<GalleryPage>) = Gallery(
+fun GalleryEntity.asAppModel(pages: List<GalleryPage>, downloadState: DownloadState) = Gallery(
     id = id,
     mediaId = mediaId,
     title = title,
@@ -32,7 +32,7 @@ fun GalleryEntity.asAppModel(pages: List<GalleryPage>) = Gallery(
     pages = pages,
     tags = tags,
     uploaded = Instant.fromEpochMilliseconds(uploaded).toLocalDateTime(TimeZone.UTC),
-    saved = saved
+    state = downloadState
 )
 
 fun Gallery.asEntity() = GalleryEntity(
@@ -43,5 +43,4 @@ fun Gallery.asEntity() = GalleryEntity(
     thumbnail = thumbnail.asEmbeddedImage(),
     uploaded = uploaded.toInstant(TimeZone.UTC).toEpochMilliseconds(),
     tags = tags,
-    saved = saved
 )

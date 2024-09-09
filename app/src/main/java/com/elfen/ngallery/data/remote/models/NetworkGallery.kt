@@ -1,5 +1,6 @@
 package com.elfen.ngallery.data.remote.models
 
+import com.elfen.ngallery.models.DownloadState
 import com.elfen.ngallery.models.Gallery
 import com.google.gson.annotations.SerializedName
 import kotlinx.datetime.Instant
@@ -29,5 +30,5 @@ fun NetworkGallery.toAppModel() = Gallery(
     pages = images.pages.mapIndexed { index, networkImage -> networkImage.toPage(mediaId, index) },
     tags = tags.toMap(),
     uploaded = Instant.fromEpochSeconds(uploadDate).toLocalDateTime(TimeZone.UTC),
-    saved = false
+    state = DownloadState.Unsaved
 )

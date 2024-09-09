@@ -1,5 +1,6 @@
 package com.elfen.ngallery.ui.screens.gallery
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,6 +53,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
+import com.elfen.ngallery.models.DownloadState
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.models.GalleryImage
 import com.elfen.ngallery.models.GalleryPage
@@ -177,15 +180,34 @@ fun GalleryScreen(
                                 }
                             )
 
-                            if (gallery.saved)
-                                TextButton(onClick = { onUnsave() }) {
-                                    Text(text = "Unsave")
+                            when (gallery.state) {
+                                is DownloadState.Done -> TextButton(onClick = { onUnsave() }) {
+                                    Text(text = "Delete")
                                 }
-                            else
-                                Button(onClick = { onSave() }) {
+
+                                is DownloadState.Unsaved -> Button(onClick = { onSave() }) {
                                     Text(text = "Save")
                                 }
 
+                                is DownloadState.Pending -> Button(
+                                    onClick = { /*TODO*/ },
+                                    enabled = false
+                                ) {
+                                    Text(text = "Pending...")
+                                }
+
+                                is DownloadState.Downloading -> Button(
+                                    onClick = { /*TODO*/ },
+                                    enabled = false
+                                ) {
+                                    val downloading = gallery.state as DownloadState.Downloading
+                                    Text(text = "${downloading.progress}/${downloading.total}")
+                                }
+
+                                is DownloadState.Failure -> Button(onClick = { onSave() }) {
+                                    Text(text = "Retry")
+                                }
+                            }
 
                             HorizontalDivider()
                             Spacer(modifier = Modifier.height(Sizes.smaller))
@@ -241,13 +263,37 @@ fun GalleryScreen(
     }
 }
 
+val uri = "ngallery://"
+
+fun NavGraphBuilder.galleryScreen(navController: NavController) {
+    composable<GalleryRoute>(
+        deepLinks = listOf(
+//            navDeepLink<GalleryRoute>(basePath = "ngallery://gallery"),
+            navDeepLink<GalleryRoute>("ngallery://read"){
+                action=Intent.ACTION_VIEW
+            }
+        )
+    ) {
+        val viewModel: GalleryViewModel = hiltViewModel()
+        val state by viewModel.state.collectAsState()
+
+        GalleryScreen(
+            state = state,
+            onBack = navController::popBackStack,
+            onNavigate = navController::navigate,
+            onSave = viewModel::saveGallery,
+            onUnsave = viewModel::removeGallery
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun GalleryScreenPreview() {
     val gallery = Gallery(
         id = 423371,
         mediaId = "2346373",
-        saved = false,
+        state = DownloadState.Unsaved,
         title = "[NEW] Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         cover = GalleryImage(
             url = "https://t5.nhentai.net/galleries/2346373/cover.jpg",
@@ -416,21 +462,6 @@ private fun GalleryScreenPreview() {
             onNavigate = {},
             onSave = {},
             onUnsave = {}
-        )
-    }
-}
-
-fun NavGraphBuilder.galleryScreen(navController: NavController) {
-    composable<GalleryRoute> {
-        val viewModel: GalleryViewModel = hiltViewModel()
-        val state by viewModel.state.collectAsState()
-
-        GalleryScreen(
-            state = state,
-            onBack = navController::popBackStack,
-            onNavigate = navController::navigate,
-            onSave = viewModel::saveGallery,
-            onUnsave = viewModel::unsaveGallery
         )
     }
 }
