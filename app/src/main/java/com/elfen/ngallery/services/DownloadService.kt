@@ -115,7 +115,6 @@ class DownloadService : Service() {
                             }
                         }
 
-                        Log.d("DownloadService", "handleMessage: Page ${it.page} Downloaded")
                         updateProgress(it.page + 1)
                     }
 
