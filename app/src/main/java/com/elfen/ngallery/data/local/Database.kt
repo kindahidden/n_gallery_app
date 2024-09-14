@@ -16,9 +16,10 @@ import com.elfen.ngallery.data.local.entities.PageEntity
         GalleryEntity::class,
         PageEntity::class,
         DownloadEntity::class
-    ], version = 2,
+    ], version = 4,
     autoMigrations = [
-
+        AutoMigration(2, 3),
+        AutoMigration(3, 4)
     ],
     exportSchema = true
 )

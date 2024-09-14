@@ -2,7 +2,6 @@ package com.elfen.ngallery.models
 
 import android.content.Context
 import kotlinx.datetime.LocalDateTime
-import kotlinx.serialization.Serializable
 import java.io.File
 
 data class Gallery(
@@ -15,6 +14,7 @@ data class Gallery(
     val tags: Map<String, List<String>>,
     val uploaded: LocalDateTime,
     val state: DownloadState,
+    val savedAt: LocalDateTime?
 )
 
 fun Gallery.toDownloaded(context: Context): Gallery {

@@ -62,7 +62,7 @@ class GalleryViewModel @Inject constructor(
 
     private fun downloadGallery() {
         viewModelScope.launch {
-            galleryRepository.updateDownloadState(route.id.toInt(), DownloadState.Pending)
+            galleryRepository.startDownload(route.id)
         }
 
         Log.d("GalleryViewModel", "downloadGallery: Started")

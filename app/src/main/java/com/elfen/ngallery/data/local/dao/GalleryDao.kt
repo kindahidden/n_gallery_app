@@ -3,6 +3,7 @@ package com.elfen.ngallery.data.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import androidx.room.Upsert
 import com.elfen.ngallery.data.local.entities.DownloadEntity
 import com.elfen.ngallery.data.local.entities.GalleryEntity
@@ -36,8 +37,11 @@ interface GalleryDao {
     @Query("UPDATE gallery SET cover_url=:cover AND thumbnail_url=:cover")
     suspend fun updateCover(cover: String)
 
+    @Query("UPDATE gallery SET savedAt=:savedAt WHERE id=:galleryId AND savedAt IS NULL")
+    suspend fun updateSavedAt(galleryId: Int, savedAt: Long?)
+
     @Transaction
-    @Query("SELECT * FROM gallery WHERE id IN (SELECT galleryId FROM download)")
+    @Query("SELECT * FROM gallery WHERE id IN (SELECT galleryId FROM download) ORDER BY savedAt DESC,id DESC")
     fun getSavedGalleries(): Flow<List<FullGallery>>
 
     @Upsert

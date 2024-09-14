@@ -268,9 +268,8 @@ val uri = "ngallery://"
 fun NavGraphBuilder.galleryScreen(navController: NavController) {
     composable<GalleryRoute>(
         deepLinks = listOf(
-//            navDeepLink<GalleryRoute>(basePath = "ngallery://gallery"),
-            navDeepLink<GalleryRoute>("ngallery://read"){
-                action=Intent.ACTION_VIEW
+            navDeepLink<GalleryRoute>("ngallery://read") {
+                action = Intent.ACTION_VIEW
             }
         )
     ) {
@@ -452,7 +451,8 @@ private fun GalleryScreenPreview() {
             "parody" to listOf("genshin impact"),
             "character" to listOf("mona megistus", "aether")
         ),
-        uploaded = Instant.fromEpochMilliseconds(1665261257000L).toLocalDateTime(TimeZone.UTC)
+        uploaded = Instant.fromEpochMilliseconds(1665261257000L).toLocalDateTime(TimeZone.UTC),
+        savedAt = null
     )
 
     AppTheme {

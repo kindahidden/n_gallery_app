@@ -1,9 +1,9 @@
 package com.elfen.ngallery.data.local.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import com.elfen.ngallery.models.DownloadState
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.models.GalleryPage
@@ -17,10 +17,11 @@ data class GalleryEntity(
     @PrimaryKey val id: Int,
     val mediaId: String,
     val title: String,
-    @Embedded(prefix = "cover_") val cover:EmbeddedImage,
+    @Embedded(prefix = "cover_") val cover: EmbeddedImage,
     @Embedded(prefix = "thumbnail_") val thumbnail: EmbeddedImage,
     val uploaded: Long,
     val tags: Map<String, List<String>>,
+    val savedAt: Long?
 )
 
 fun GalleryEntity.asAppModel(pages: List<GalleryPage>, downloadState: DownloadState) = Gallery(
@@ -32,7 +33,8 @@ fun GalleryEntity.asAppModel(pages: List<GalleryPage>, downloadState: DownloadSt
     pages = pages,
     tags = tags,
     uploaded = Instant.fromEpochMilliseconds(uploaded).toLocalDateTime(TimeZone.UTC),
-    state = downloadState
+    state = downloadState,
+    savedAt = savedAt?.let { Instant.fromEpochMilliseconds(it).toLocalDateTime(TimeZone.UTC) }
 )
 
 fun Gallery.asEntity() = GalleryEntity(
@@ -43,4 +45,5 @@ fun Gallery.asEntity() = GalleryEntity(
     thumbnail = thumbnail.asEmbeddedImage(),
     uploaded = uploaded.toInstant(TimeZone.UTC).toEpochMilliseconds(),
     tags = tags,
+    savedAt = savedAt?.toInstant(TimeZone.UTC)?.toEpochMilliseconds()
 )

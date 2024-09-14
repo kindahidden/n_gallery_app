@@ -1,7 +1,7 @@
 package com.elfen.ngallery.data.repository
 
 import android.content.Context
-import androidx.compose.ui.util.fastAny
+import android.util.Log
 import com.elfen.ngallery.data.local.dao.GalleryDao
 import com.elfen.ngallery.data.local.entities.asAppModel
 import com.elfen.ngallery.data.local.entities.asDownloadEntity
@@ -11,15 +11,13 @@ import com.elfen.ngallery.data.remote.models.toAppModel
 import com.elfen.ngallery.models.DownloadState
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.models.GalleryImage
-import com.elfen.ngallery.models.Resource
 import com.elfen.ngallery.models.Sorting
 import com.elfen.ngallery.models.coverFile
-import com.elfen.ngallery.models.pageFile
 import com.elfen.ngallery.models.pagesDir
 import com.elfen.ngallery.utilities.resourceOf
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jsoup.Jsoup
@@ -68,7 +66,8 @@ class GalleryRepository(
                 pages = listOf(),
                 tags = mapOf(),
                 uploaded = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                state = DownloadState.Unsaved
+                state = DownloadState.Unsaved,
+                savedAt = null
             )
         }
 
@@ -107,6 +106,8 @@ class GalleryRepository(
 
         gallery.coverFile(context).delete()
         gallery.pagesDir(context).delete()
+
+        galleryDao.updateSavedAt(gallery.id, null)
     }
 
     fun getSavedGalleriesFlow() =
@@ -118,5 +119,11 @@ class GalleryRepository(
 
     suspend fun updateDownloadState(galleryId: Int, downloadState: DownloadState) {
         galleryDao.upsertDownloadState(downloadState.asDownloadEntity(galleryId))
+    }
+
+    suspend fun startDownload(id: Int) {
+        Log.d("GalleryRepository", "startDownload: ${Clock.System.now().toEpochMilliseconds()}")
+        galleryDao.updateSavedAt(id, Clock.System.now().toEpochMilliseconds())
+        updateDownloadState(id, DownloadState.Pending)
     }
 }
