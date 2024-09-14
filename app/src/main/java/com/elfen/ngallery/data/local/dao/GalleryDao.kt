@@ -1,6 +1,8 @@
 package com.elfen.ngallery.data.local.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -14,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GalleryDao {
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGallery(galleryEntity: GalleryEntity)
 
     @Upsert
