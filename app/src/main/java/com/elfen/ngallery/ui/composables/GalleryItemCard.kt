@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import coil.compose.AsyncImage
 import com.elfen.ngallery.models.DownloadState
 import com.elfen.ngallery.models.Gallery
 import com.elfen.ngallery.ui.theme.Sizes

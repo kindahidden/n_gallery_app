@@ -13,13 +13,15 @@ val NetworkImage.extension
     get() = when(t){
         "p" -> "png"
         "g" -> "gif"
+        "a" -> "avif"
+        "w" -> "webp"
         else -> "jpg"
     }
 
 fun NetworkImage.toThumbnailUrl(mediaId: String) = "https://t3.nhentai.net/galleries/$mediaId/thumb.$extension"
 fun NetworkImage.toCoverUrl(mediaId: String) = "https://t3.nhentai.net/galleries/${mediaId}/cover.$extension"
 fun NetworkImage.toPageSdUrl(mediaId: String, index: Int) = "https://t3.nhentai.net/galleries/$mediaId/${index + 1}t.$extension"
-fun NetworkImage.toPageHdUrl(mediaId: String, index: Int) = "https://i.nhentai.net/galleries/$mediaId/${index + 1}.$extension"
+fun NetworkImage.toPageHdUrl(mediaId: String, index: Int) = "https://i3.nhentai.net/galleries/$mediaId/${index + 1}.$extension"
 
 fun NetworkImage.toThumbnail(mediaId: String) = GalleryImage(
     url = toThumbnailUrl(mediaId),

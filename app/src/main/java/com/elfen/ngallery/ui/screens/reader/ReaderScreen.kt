@@ -10,7 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import coil.compose.AsyncImage
 import com.elfen.ngallery.ui.composables.Image
 import com.elfen.ngallery.ui.screens.gallery.GalleryUiState
 

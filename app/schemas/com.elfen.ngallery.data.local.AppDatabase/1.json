@@ -1,0 +1,201 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "29ea437aee6462fba8632fdf3debb84e",
+    "entities": [
+      {
+        "tableName": "gallery",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `mediaId` TEXT NOT NULL, `title` TEXT NOT NULL, `uploaded` INTEGER NOT NULL, `tags` TEXT NOT NULL, `cover_url` TEXT NOT NULL, `cover_width` INTEGER NOT NULL, `cover_height` INTEGER NOT NULL, `cover_aspectRatio` REAL NOT NULL, `thumbnail_url` TEXT NOT NULL, `thumbnail_width` INTEGER NOT NULL, `thumbnail_height` INTEGER NOT NULL, `thumbnail_aspectRatio` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaId",
+            "columnName": "mediaId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uploaded",
+            "columnName": "uploaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tags",
+            "columnName": "tags",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cover.url",
+            "columnName": "cover_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cover.width",
+            "columnName": "cover_width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cover.height",
+            "columnName": "cover_height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cover.aspectRatio",
+            "columnName": "cover_aspectRatio",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail.url",
+            "columnName": "thumbnail_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail.width",
+            "columnName": "thumbnail_width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail.height",
+            "columnName": "thumbnail_height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail.aspectRatio",
+            "columnName": "thumbnail_aspectRatio",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "page",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`galleryId` INTEGER NOT NULL, `url` TEXT NOT NULL, `hdUrl` TEXT NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `aspectRatio` REAL NOT NULL, `page` INTEGER NOT NULL, PRIMARY KEY(`galleryId`, `page`))",
+        "fields": [
+          {
+            "fieldPath": "galleryId",
+            "columnName": "galleryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hdUrl",
+            "columnName": "hdUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "aspectRatio",
+            "columnName": "aspectRatio",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "page",
+            "columnName": "page",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "galleryId",
+            "page"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "download",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`galleryId` INTEGER NOT NULL, `state` TEXT NOT NULL, `progress` INTEGER, `total` INTEGER, PRIMARY KEY(`galleryId`))",
+        "fields": [
+          {
+            "fieldPath": "galleryId",
+            "columnName": "galleryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "progress",
+            "columnName": "progress",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "total",
+            "columnName": "total",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "galleryId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '29ea437aee6462fba8632fdf3debb84e')"
+    ]
+  }
+}

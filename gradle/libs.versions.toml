@@ -18,14 +18,17 @@ loggingInterceptor = "5.0.0-alpha.14"
 gson = "2.11.0"
 converterGson = "2.11.0"
 datastorePreferences = "1.1.1"
-coilCompose = "2.7.0"
+coilCompose = "3.0.4"
 kotlinxDatetime = "0.6.1"
 roomCompiler = "2.6.1"
 roomRuntime = "2.6.1"
 roomKtx = "2.6.1"
-coilGif = "2.7.0"
+coilGif = "3.0.4"
 jsoup = "1.18.1"
 materialIconsExtended = "1.7.0"
+coilNetworkOkhttp = "3.0.4"
+coilComposeVersion = "3.0.4"
+coilGifVersion = "3.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,6 +63,9 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coilGif" }
 jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
+coil3-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilComposeVersion" }
+coil3-coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version.ref = "coilGifVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

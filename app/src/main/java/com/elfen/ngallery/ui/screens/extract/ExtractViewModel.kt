@@ -23,7 +23,8 @@ class ExtractViewModel @Inject constructor(
         viewModelScope.launch {
             state.map { it.text }.collect {
                 val regex = Regex("(?<!\\d)\\d{5,6}(?!\\d)")
-                val matches = regex.findAll(it).toList().map { match -> match.value.toInt() }
+                val matches = regex.findAll(it).toList().map { match -> match.value.toInt() }.distinct()
+
                 _state.update { state -> state.copy(idList = matches) }
             }
         }
