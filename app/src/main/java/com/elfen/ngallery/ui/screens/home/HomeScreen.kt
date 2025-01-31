@@ -2,15 +2,23 @@ package com.elfen.ngallery.ui.screens.home
 
 import androidx.compose.foundation.BasicTooltipBox
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.rememberBasicTooltipState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.ScreenRotationAlt
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Tag
@@ -19,6 +27,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -27,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -44,6 +54,7 @@ import com.elfen.ngallery.ui.composables.GalleryItemCard
 import com.elfen.ngallery.ui.screens.extract.ExtractRoute
 import com.elfen.ngallery.ui.screens.gallery.GalleryRoute
 import com.elfen.ngallery.ui.screens.login.Login
+import com.elfen.ngallery.ui.theme.AppTheme
 import com.elfen.ngallery.ui.theme.Sizes
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -66,38 +77,56 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text(text = "Home") },
                 actions = {
-                    IconButton(onClick = { onNavigate(ExtractRoute) }) {
-                        Icon(imageVector = Icons.Default.Tag, contentDescription = null)
-                    }
-
-                    // Opens random gallery
-                    IconButton(onClick = { onNavigate(GalleryRoute(galleries.random().id)) }) {
-                        Icon(
-                            imageVector = Icons.Default.ScreenRotationAlt,
-                            contentDescription = null
-                        )
+                    if(isLoggedIn){
+                        IconButton(onClick = { onNavigate(Login) }) {
+                            Icon(imageVector = Icons.Default.Login, contentDescription = null)
+                        }
                     }
                 }
             )
         },
         floatingActionButton = {
-            if (isLoggedIn)
-                ExtendedFloatingActionButton(
-                    text = { Text(text = "Search") },
-                    icon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
-                    onClick = { onNavigate(BrowseRoute()) }
-                )
-            else {
-                ExtendedFloatingActionButton(
-                    text = { Text(text = "Login") },
-                    icon = {
+            Column {
+                Row {
+                    SmallFloatingActionButton(
+                        onClick = { onNavigate(ExtractRoute) },
+                        shape = RoundedCornerShape(12.dp),
+                    ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_login_24),
-                            contentDescription = null
+                            imageVector = Icons.Default.Tag,
+                            contentDescription = "Extract Ids"
                         )
-                    },
-                    onClick = { onNavigate(Login) }
-                )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SmallFloatingActionButton(
+                        onClick = { onNavigate(GalleryRoute(galleries.random().id)) },
+                        shape = RoundedCornerShape(12.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ScreenRotationAlt,
+                            contentDescription = "Select Random"
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                if (isLoggedIn)
+                    ExtendedFloatingActionButton(
+                        text = { Text(text = "Search") },
+                        icon = { Icon(imageVector = Icons.Default.Search, contentDescription = null) },
+                        onClick = { onNavigate(BrowseRoute()) },
+                    )
+                else {
+                    ExtendedFloatingActionButton(
+                        text = { Text(text = "Login") },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_login_24),
+                                contentDescription = null
+                            )
+                        },
+                        onClick = { onNavigate(Login) }
+                    )
+                }
             }
         }
     ) {

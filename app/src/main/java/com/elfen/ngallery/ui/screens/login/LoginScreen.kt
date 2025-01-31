@@ -5,6 +5,7 @@ import android.app.ProgressDialog.show
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
@@ -33,7 +34,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 object Login
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SetJavaScriptEnabled")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -59,6 +60,13 @@ fun LoginScreen(
         AndroidView(
             factory = {
                 WebView(it).apply {
+                    settings.javaScriptEnabled = true
+//                    settings.domStorageEnabled = true
+//                    settings.loadsImagesAutomatically = true
+//                    settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+//                    settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+
+
                     layoutParams = ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
@@ -68,8 +76,8 @@ fun LoginScreen(
                         coroutineScope.launch { context.storeToken.setToken(token) }
                         Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
                     }
-
                     loadUrl(context.getString(R.string.login_url))
+//                    loadUrl("https://nhentai.net")
                 }
             },
         )
@@ -87,7 +95,14 @@ fun NavGraphBuilder.loginScreen(navController: NavController) {
 class WebViewTokenInterceptor(private val webView: WebView,private val onSetToken: (String?) -> Unit) : WebViewClient() {
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        val cookies = CookieManager.getInstance().getCookie(url).split("; ")
+        val cookieValue =CookieManager.getInstance().getCookie(url)
+
+        if(cookieValue == null){
+            return
+        }
+
+        Log.d("TAG", "onPageFinished: ${cookieValue}")
+        val cookies = cookieValue.split("; ")
         val token = cookies
             .find { it.startsWith("csrftoken") }
             ?.split("=")?.get(1)
