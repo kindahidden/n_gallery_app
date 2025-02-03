@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
+
 plugins {
     id("kotlin-kapt")
     alias(libs.plugins.android.application)
@@ -103,4 +105,5 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     annotationProcessor(libs.androidx.room.compiler)
     kapt(libs.androidx.room.compiler)
+    implementation("com.github.franmontiel:PersistentCookieJar:v1.0.1")
 }

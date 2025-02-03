@@ -5,6 +5,7 @@ import android.app.ProgressDialog.show
 import android.util.Log
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -60,11 +61,25 @@ fun LoginScreen(
         AndroidView(
             factory = {
                 WebView(it).apply {
+                    webChromeClient = WebChromeClient()
                     settings.javaScriptEnabled = true
 //                    settings.domStorageEnabled = true
 //                    settings.loadsImagesAutomatically = true
 //                    settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
 //                    settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+                    settings.setJavaScriptEnabled(true);
+                    settings.setDomStorageEnabled(true);
+                    settings.setUseWideViewPort(true);
+                    settings.setLoadWithOverviewMode(true);
+                    settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+                    settings.setSupportZoom(true);
+                    settings.setBuiltInZoomControls(true);
+                    settings.setDisplayZoomControls(false);
+                    settings.setAllowContentAccess(true);
+                    Log.d("TAG", "LoginScreen: ${settings.userAgentString}")
+
+                    CookieManager.getInstance().removeAllCookies(null)
+                    CookieManager.getInstance().flush();
 
 
                     layoutParams = ViewGroup.LayoutParams(
@@ -72,8 +87,11 @@ fun LoginScreen(
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
 
-                    webViewClient = WebViewTokenInterceptor(webView = this) { token ->
-                        coroutineScope.launch { context.storeToken.setToken(token) }
+                    webViewClient = WebViewTokenInterceptor(webView = this) { token, agent ->
+                        coroutineScope.launch {
+                            context.storeToken.setToken(token)
+                            context.storeToken.setAgent(agent)
+                        }
                         Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
                     }
                     loadUrl(context.getString(R.string.login_url))
@@ -92,7 +110,7 @@ fun NavGraphBuilder.loginScreen(navController: NavController) {
     }
 }
 
-class WebViewTokenInterceptor(private val webView: WebView,private val onSetToken: (String?) -> Unit) : WebViewClient() {
+class WebViewTokenInterceptor(private val webView: WebView,private val onSetToken: (String?, String?) -> Unit) : WebViewClient() {
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         val cookieValue =CookieManager.getInstance().getCookie(url)
@@ -108,6 +126,6 @@ class WebViewTokenInterceptor(private val webView: WebView,private val onSetToke
             ?.split("=")?.get(1)
 
         Log.d("LoginScreen", "onPageFinished: ${webView.settings.userAgentString}")
-        onSetToken(token)
+        onSetToken(cookieValue,webView.settings.userAgentString)
     }
 }

@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit
 class StoreToken(private val context: Context) {
     companion object {
         val KEY = stringPreferencesKey("login_token")
+        val AGENT_KEY = stringPreferencesKey("user_agent")
         val KEY_EXPIRATION = longPreferencesKey("login_expire")
         val EXPIRATION_DURATION = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)
     }
@@ -31,6 +32,18 @@ class StoreToken(private val context: Context) {
             }
         }
     }
+
+    suspend fun setAgent(agent: String?) {
+        context.dataStore.edit {
+            if (agent == null) {
+                it.remove(AGENT_KEY)
+            } else {
+                it[AGENT_KEY] = agent
+            }
+        }
+    }
+
+    val getAgent: Flow<String?> = context.dataStore.data.map { it[AGENT_KEY] }
 
     val getToken: Flow<String?> = context.dataStore.data.map { it[KEY] }
     val isTokenValid: Flow<Boolean> = context.dataStore.data.map {
